@@ -5,7 +5,14 @@ export async function generateStaticParams() {
   return posts;
 }
 
-export default async function Post({ params }: { params: { slug: string } }) {
+interface PageProps {
+  params: {
+    slug: string;
+  } & Promise<any>; // This is a workaround for a potential Next.js type inference issue
+  searchParams?: { [key: string]: string | string[] | undefined } & Promise<any>;
+}
+
+export default async function Post({ params }: PageProps) {
   const postData = await getPostData(params.slug);
   return (
     <main className="container mx-auto px-4 py-8 max-w-3xl">
